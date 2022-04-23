@@ -1,0 +1,26 @@
+﻿<Properties StartupConfiguration="{AE427967-CA02-0E86-DBD1-E8BBE48291FB}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/PythonExample.cs">
+    <Files>
+      <File FileName="Assets/rotorController.cs" Line="80" Column="32" />
+      <File FileName="Assets/PythonExample.cs" Line="16" Column="47" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Dorne Simulation" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="rotorController.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="9b4461b5-83f0-4dd4-9715-d96bbe70f583" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
