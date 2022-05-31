@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class rotorController : MonoBehaviour
 {
-    public GameObject drone;
+    public GameObject core;
 
     public GameObject frr;
     public GameObject flr;
@@ -25,7 +28,7 @@ public class rotorController : MonoBehaviour
     public float brrF;
     public float blrF;
 
-    private Vector3 DroneLookDirection;
+    private Vector3 coreLookDirection;
 
     private float ax;
     private float ay;
@@ -34,7 +37,13 @@ public class rotorController : MonoBehaviour
     private Vector3 currentOrientation;
 
 
-    
+    float[] measurements;
+    float[] outputs;
+
+    string measurements_path;
+    string outputs_path;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,11 +57,73 @@ public class rotorController : MonoBehaviour
         brrF = 19.62f;
         flrF = 19.62f;
         blrF = 19.62f;
+
+
+        measurements = new float[4];
+        outputs = new float[4];
+
+        string current_dir = @"C:\Andi_Arbeit\Programmieren\Drone\Drone Simulation\Assets";
+        string path_to_interface = File.ReadAllText(System.IO.Path.Combine(current_dir, "sim_interface_dir_path.txt"));
+        string interface_path = System.IO.Path.Combine(path_to_interface, "interface_sim-control");
+
+        measurements_path = System.IO.Path.Combine(interface_path, "measurements.txt");
+        outputs_path = System.IO.Path.Combine(interface_path, "outputs.txt");
+        Debug.Log(measurements_path);
+        Debug.Log(outputs_path);
+    }
+    
+    private void  writeMeasurements()
+    {
+        try
+        {
+            using (StreamWriter file = new StreamWriter(measurements_path))
+            {
+                foreach (double measurement in measurements)
+                {
+                    file.WriteLine(measurement);
+                }
+            };
+        }
+        catch (IOException)
+        {
+            Debug.Log("retry accessing file at: " + measurements_path);
+        }
+    }
+
+    private void updateOutputs()
+    {
+        try
+        {
+            int i = 0;
+            foreach (string line in File.ReadLines(outputs_path))
+            {
+                outputs[i] = float.Parse(line);
+                i += 1;
+            }
+        }
+        catch (IOException)
+        {
+            Debug.Log("retry accessing file at: " + outputs_path);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        measurements[0] = frr.transform.position.y - core.transform.position.y;
+        measurements[1] = brr.transform.position.y - core.transform.position.y;
+        measurements[2] = blr.transform.position.y - core.transform.position.y;
+        measurements[3] = flr.transform.position.y - core.transform.position.y;
+
+        writeMeasurements();
+        updateOutputs();
+
+        frrF = outputs[0] + 19.62f;
+        brrF = outputs[1] + 19.62f;
+        blrF = outputs[2] + 19.62f;
+        flrF = outputs[3] + 19.62f;
+
+
         if (allRotorsF != previousAllRotorsF)
         {
             frrF += allRotorsF;
@@ -94,10 +165,10 @@ public class rotorController : MonoBehaviour
         //                                 Mathf.Cos(ay + Mathf.Atan(Mathf.Cos(az) / Mathf.Cos(ax))));
 
         //Kraft - Vector an die Rotoren weitergeben
-        frr.GetComponent<ConstantForce>().force = drone.transform.rotation * Vector3.up * frrF;
-        brr.GetComponent<ConstantForce>().force = drone.transform.rotation * Vector3.up * brrF;
-        blr.GetComponent<ConstantForce>().force = drone.transform.rotation * Vector3.up * blrF;
-        flr.GetComponent<ConstantForce>().force = drone.transform.rotation * Vector3.up * flrF;
+        frr.GetComponent<ConstantForce>().force = core.transform.rotation * Vector3.up * frrF;
+        brr.GetComponent<ConstantForce>().force = core.transform.rotation * Vector3.up * brrF;
+        blr.GetComponent<ConstantForce>().force = core.transform.rotation * Vector3.up * blrF;
+        flr.GetComponent<ConstantForce>().force = core.transform.rotation * Vector3.up * flrF;
 
 
 
@@ -107,7 +178,6 @@ public class rotorController : MonoBehaviour
         blr.GetComponent<ConstantForce>().torque = new Vector3(0, (blrF - 19.62f) * 10, 0);
         flr.GetComponent<ConstantForce>().torque = new Vector3(0, (-flrF + 19.62f) * 10, 0);
 
-        Debug.Log(drone.transform.rotation * Vector3.up * frrF);
-        
+        Debug.Log(core.transform.rotation * Vector3.up * frrF);
     }
 }

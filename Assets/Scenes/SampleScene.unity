@@ -848,7 +848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a214293ffef0c49db8ff9ee766656ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drone: {fileID: 1597558001}
+  core: {fileID: 1597558001}
   frr: {fileID: 1834803702}
   flr: {fileID: 891663788}
   brr: {fileID: 2087534630}
