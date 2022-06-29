@@ -62,7 +62,7 @@ public class rotorController : MonoBehaviour
         measurements = new float[4];
         outputs = new float[4];
 
-        string current_dir = @"C:\Andi_Arbeit\Programmieren\Drone\Drone Simulation\Assets";
+        string current_dir = @"C:\Andi_Arbeit\Programmieren\Drone\Drone-Simulation\Assets";
         string path_to_interface = File.ReadAllText(System.IO.Path.Combine(current_dir, "sim_interface_dir_path.txt"));
         string interface_path = System.IO.Path.Combine(path_to_interface, "interface_sim-control");
 
@@ -118,10 +118,10 @@ public class rotorController : MonoBehaviour
         writeMeasurements();
         updateOutputs();
 
-        frrF = outputs[0] + 19.62f;
-        brrF = outputs[1] + 19.62f;
-        blrF = outputs[2] + 19.62f;
-        flrF = outputs[3] + 19.62f;
+        frrF = outputs[0];
+        brrF = outputs[1];
+        blrF = outputs[2];
+        flrF = outputs[3];
 
 
         if (allRotorsF != previousAllRotorsF)
