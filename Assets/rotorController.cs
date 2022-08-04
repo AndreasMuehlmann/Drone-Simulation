@@ -43,6 +43,8 @@ public class rotorController : MonoBehaviour
     string measurements_path;
     string outputs_path;
 
+    //public GameObject camera;
+
 
     // Start is called before the first frame update
     void Start()
@@ -68,8 +70,6 @@ public class rotorController : MonoBehaviour
 
         measurements_path = System.IO.Path.Combine(interface_path, "measurements.txt");
         outputs_path = System.IO.Path.Combine(interface_path, "outputs.txt");
-        Debug.Log(measurements_path);
-        Debug.Log(outputs_path);
     }
     
     private void  writeMeasurements()
@@ -110,17 +110,19 @@ public class rotorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        measurements[0] = frr.transform.position.y - core.transform.position.y;
-        measurements[1] = brr.transform.position.y - core.transform.position.y;
-        measurements[2] = blr.transform.position.y - core.transform.position.y;
-        measurements[3] = flr.transform.position.y - core.transform.position.y;
+        //camera.transform.position = new Vector3(core.transform.position.x, core.transform.position.y + 5, core.transform.position.z - 50);
+
+        measurements[0] = (float) (Math.Atan((blr.transform.position.y - core.transform.position.y) / 3) / (2 * Math.PI) * 360);
+        measurements[1] = (float) (Math.Atan((brr.transform.position.y - core.transform.position.y) / 3) / (2 * Math.PI) * 360); 
+        measurements[2] = (float) (Math.Atan((frr.transform.position.y - core.transform.position.y) / 3) / (2 * Math.PI) * 360);
+        measurements[3] = (float) (Math.Atan((flr.transform.position.y - core.transform.position.y) / 3) / (2 * Math.PI) * 360);
 
         writeMeasurements();
         updateOutputs();
 
-        frrF = outputs[0];
+        blrF = outputs[0];
         brrF = outputs[1];
-        blrF = outputs[2];
+        frrF = outputs[2];
         flrF = outputs[3];
 
 
@@ -177,7 +179,5 @@ public class rotorController : MonoBehaviour
         brr.GetComponent<ConstantForce>().torque = new Vector3(0, (-brrF + 19.62f) * 10, 0); //brr & flr drehen sich anders herum, damit sich die Drohne nicht dreht
         blr.GetComponent<ConstantForce>().torque = new Vector3(0, (blrF - 19.62f) * 10, 0);
         flr.GetComponent<ConstantForce>().torque = new Vector3(0, (-flrF + 19.62f) * 10, 0);
-
-        Debug.Log(core.transform.rotation * Vector3.up * frrF);
     }
 }
